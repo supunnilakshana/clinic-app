@@ -1,12 +1,13 @@
-import 'dart:convert';
-
+import 'package:clinicapp/models/user_model.dart';
+import 'package:clinicapp/services/secure_sorage_service/secure_sorage_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 class HttpClient {
   Dio dio = Dio();
+  final SecureStorageService _secureStorageService = SecureStorageService();
 
-  String baseURL = 'http://20.248.186.239/api/';
+  String baseURL = 'http://10.0.2.2:45457/api/';
 
   Map<String, dynamic> headers = {
     "Accept": "application/json",
@@ -21,20 +22,18 @@ class HttpClient {
     dio.options.headers = headers;
   }
 
-//   void setToken(String token) async {
-//     headers["Authorization"] = "Bearer $token";
-//     dio.options.headers = headers;
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     await prefs.setString('token', token);
-//   }
+  Future setToken(String token) async {
+    headers["Authorization"] = "Bearer $token";
+    dio.options.headers = headers;
+    await _secureStorageService.setToken(token);
+  }
 
-//   Future<void> setSavedToken() async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     String token = prefs.getString('token') ?? '';
-//     print("token----> " + token);
-//     headers["Authorization"] = "Bearer $token";
-//     dio.options.headers = headers;
-//   }
+  Future<void> setSavedToken() async {
+    String token = await _secureStorageService.getToken() ?? "";
+
+    headers["Authorization"] = "Bearer $token";
+    dio.options.headers = headers;
+  }
 
 //   Future post(String url, Map data) async {
 //     try {
@@ -53,25 +52,74 @@ class HttpClient {
 //     };
 //   }
 
-//   //SignIn
-//   Future signIn(Map data) async {
-//     Response response = await post('/auth/login', data);
-//     return {
-//       "code": response.statusCode,
-//       "data": response.data,
-//     };
-//   }
+  //Signin
+  Future<bool> signIn(String username, String password) async {
+    final reqData = {"login": username, "password": password};
+    try {
+      const endpoint = 'login';
+      Response response = await dio.post(endpoint, data: reqData);
+      print(response.data);
+      var resposndata = response.data['data'];
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final user = UserModel.fromMap(resposndata['user']);
+        final token = resposndata['token'];
+        await setToken(token);
+        await _secureStorageService.setUserData(user);
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return false;
+    }
+  }
 
-//   //SignIn
-//   Future signUp(RegiUserModel model) async {
-//     print(model.toMap());
-//     Response response = await post('/auth/register', model.toMap());
-//     print(response.data);
-//     return {
-//       "code": response.statusCode,
-//       "data": response.data,
-//     };
-//   }
+  //Signin
+  Future<bool> signUp(UserModel model) async {
+    try {
+      const endpoint = 'register';
+      Response response = await dio.post(endpoint, data: model.toMap());
+      print(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var resposndata = response.data['data'];
+        final user = UserModel.fromMap(resposndata['user']);
+        final token = resposndata['token'];
+        await setToken(token);
+        await _secureStorageService.setUserData(user);
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return false;
+    }
+  }
+
+  //Signout
+  Future<bool> signOut() async {
+    try {
+      const endpoint = 'logout';
+      Response response = await dio.post(endpoint, data: {});
+      print(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        await _secureStorageService.clearData();
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return false;
+    }
+  }
 
 //   // products
 

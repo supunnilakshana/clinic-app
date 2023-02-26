@@ -1,5 +1,7 @@
+import 'package:clinicapp/config/http_handeler/httpClient.dart';
 import 'package:clinicapp/services/validator/validate_handeler.dart';
 import 'package:clinicapp/ui/screens/auth/sign_up.dart';
+import 'package:clinicapp/ui/screens/home/homescreen.dart';
 import 'package:clinicapp/ui/styles/app_styles.dart';
 import 'package:clinicapp/ui/widgets/already_have_an_account_acheck.dart';
 import 'package:clinicapp/ui/widgets/or_divider.dart';
@@ -174,44 +176,31 @@ class _SignInState extends State<SignIn> {
                             GestureDetector(
                               onTap: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  // print("press login");
-                                  // print(_email.trim());
-                                  // print(_passWord);
-                                  // int r = await SigninManager()
-                                  //     .signIn(_email.trim(), _passWord);
-                                  // print(r.toString() +
-                                  //     "------------------------------------------");
-                                  // if (r == resok) {
-                                  //   print("loged");
-                                  //   // ignore: use_build_context_synchronously
-                                  //   Navigator.pushReplacement(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //       builder: (context) {
-                                  //         return const CheckSignIn();
-                                  //       },
-                                  //     ),
-                                  //   );
-                                  // } else if (r == resfail) {
-                                  //   Get.snackbar(
-                                  //     "Signin failed",
-                                  //     "Please enter the correct email or password",
-                                  //     backgroundColor: Colors.red,
-                                  //     icon: const Icon(Icons.error,
-                                  //         color: Colors.white),
-                                  //     snackPosition: SnackPosition.BOTTOM,
-                                  //   );
-                                  // } else if (r == resfail) {
-                                  //   Get.snackbar(
-                                  //     "Signin failed",
-                                  //     "Please enter the correct email or password",
-                                  //     colorText: Colors.red,
-                                  //     backgroundColor: Colors.yellow,
-                                  //     icon: const Icon(Icons.error,
-                                  //         color: Colors.black),
-                                  //     snackPosition: SnackPosition.TOP,
-                                  //   );
-                                  // }
+                                  print("press login");
+
+                                  final r = await httpClient.signIn(
+                                      _email.trim(), _passWord);
+
+                                  if (r == true) {
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return const HomeScreen();
+                                        },
+                                      ),
+                                    );
+                                    print(r);
+                                  } else {
+                                    Get.snackbar(
+                                      "SignUp failed",
+                                      "Please enter the valid email or password",
+                                      icon: const Icon(Icons.error,
+                                          color: Colors.white),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                    );
+                                  }
                                 } else {
                                   print("Not Complete");
                                 }

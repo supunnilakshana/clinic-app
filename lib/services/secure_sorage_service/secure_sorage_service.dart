@@ -67,4 +67,13 @@ class SecureStorageService {
       return null;
     }
   }
+
+  Future<bool> clearData() async {
+    try {
+      await storage.deleteAll();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

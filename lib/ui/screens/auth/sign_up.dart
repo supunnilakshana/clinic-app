@@ -1,13 +1,16 @@
 import 'dart:io';
-import 'dart:typed_data';
 
+import 'package:clinicapp/config/http_handeler/httpClient.dart';
+import 'package:clinicapp/models/user_model.dart';
 import 'package:clinicapp/services/validator/validate_handeler.dart';
 import 'package:clinicapp/ui/screens/auth/sign_in.dart';
+import 'package:clinicapp/ui/screens/home/homescreen.dart';
 import 'package:clinicapp/ui/styles/app_styles.dart';
 import 'package:clinicapp/ui/widgets/already_have_an_account_acheck.dart';
 import 'package:clinicapp/ui/widgets/or_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -19,20 +22,25 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   String _email = "";
   String _passWord = "";
+  String _cpassWord = "";
   String _name = "";
   String _mobile = "";
-  String _city = "";
+  String pno = "";
   String _addr = "";
-  String _emno = "";
+  String _dob = "";
+  String _surname = "";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _uncon = TextEditingController();
+  final TextEditingController _emailcon = TextEditingController();
   final TextEditingController _pwcon = TextEditingController();
+  final TextEditingController _cpwcon = TextEditingController();
   final TextEditingController _namecon = TextEditingController();
+  final TextEditingController _sornamecon = TextEditingController();
+
   final TextEditingController _mobilecon = TextEditingController();
-  final TextEditingController _citycon = TextEditingController();
+  final TextEditingController pnocon = TextEditingController();
   final TextEditingController _addrcon = TextEditingController();
-  final TextEditingController _emnocon = TextEditingController();
+  final TextEditingController _dobcon = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -137,9 +145,9 @@ class _SignUpState extends State<SignUp> {
                                                       color: Colors
                                                           .grey.shade200))),
                                           child: TextFormField(
-                                            controller: _namecon,
+                                            controller: _sornamecon,
                                             onChanged: (value) {
-                                              _name = value;
+                                              _surname = value;
                                             },
                                             validator: (value) {
                                               return Validater.genaralvalid(
@@ -163,7 +171,7 @@ class _SignUpState extends State<SignUp> {
                                                 color: Colors.grey.shade200))),
                                     child: TextFormField(
                                       keyboardType: TextInputType.emailAddress,
-                                      controller: _uncon,
+                                      controller: _emailcon,
                                       onChanged: (value) {
                                         _email = value;
                                       },
@@ -207,12 +215,12 @@ class _SignUpState extends State<SignUp> {
                                             bottom: BorderSide(
                                                 color: Colors.grey.shade200))),
                                     child: TextFormField(
-                                      controller: _citycon,
+                                      controller: pnocon,
                                       onChanged: (value) {
-                                        _city = value;
+                                        pno = value;
                                       },
                                       validator: (value) {
-                                        return Validater.genaralvalid(value!);
+                                        return null;
                                       },
                                       decoration: const InputDecoration(
                                           hintText:
@@ -230,15 +238,15 @@ class _SignUpState extends State<SignUp> {
                                                 color: Colors.grey.shade200))),
                                     child: TextFormField(
                                       keyboardType: TextInputType.datetime,
-                                      controller: _emnocon,
+                                      controller: _dobcon,
                                       onChanged: (value) {
-                                        _emno = value;
+                                        _dob = value;
                                       },
                                       validator: (value) {
                                         return Validater.genaralvalid(value!);
                                       },
                                       decoration: const InputDecoration(
-                                          hintText: "Date of birth",
+                                          hintText: "Date of birth(dd/mm/yyyy)",
                                           hintStyle:
                                               TextStyle(color: Colors.grey),
                                           border: InputBorder.none),
@@ -260,7 +268,7 @@ class _SignUpState extends State<SignUp> {
                                         return Validater.signupPassword(value!);
                                       },
                                       decoration: const InputDecoration(
-                                          suffixIcon: Icon(Icons.visibility),
+                                          //suffixIcon: Icon(Icons.visibility),
                                           hintText: "Password ",
                                           hintStyle:
                                               TextStyle(color: Colors.grey),
@@ -275,15 +283,19 @@ class _SignUpState extends State<SignUp> {
                                                 color: Colors.grey.shade200))),
                                     child: TextFormField(
                                       obscureText: true,
-                                      controller: _pwcon,
+                                      controller: _cpwcon,
                                       onChanged: (value) {
-                                        _passWord = value;
+                                        _cpassWord = value;
                                       },
                                       validator: (value) {
-                                        return Validater.signupPassword(value!);
+                                        if (_cpwcon.text == _pwcon.text) {
+                                          return null;
+                                        } else {
+                                          return "not match with password";
+                                        }
                                       },
                                       decoration: const InputDecoration(
-                                          suffixIcon: Icon(Icons.visibility),
+                                          //    suffixIcon: Icon(Icons.visibility),
                                           hintText: "Confirm Password",
                                           hintStyle:
                                               TextStyle(color: Colors.grey),
@@ -299,72 +311,50 @@ class _SignUpState extends State<SignUp> {
                             GestureDetector(
                               onTap: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  // print("press login");
+                                  print("press");
                                   // _scaffoldKey.currentState!
-                                  //     // ignore: deprecated_member_use
-                                  //     .showSnackBar(SnackBar(
-                                  //   duration: const Duration(seconds: 4),
-                                  //   backgroundColor: kPrimaryColordark,
-                                  //   content: Row(
-                                  //     children: const <Widget>[
-                                  //       CircularProgressIndicator(),
-                                  //       Text("Registering...")
-                                  //     ],
-                                  //   ),
-                                  // ));
-                                  // print(_email.trim());
-                                  // print(_passWord);
+                                  //     .showBottomSheet((context) => SnackBar(
+                                  //           duration:
+                                  //               const Duration(seconds: 4),
+                                  //           backgroundColor: kPrimaryColordark,
+                                  //           content: Row(
+                                  //             children: const <Widget>[
+                                  //               CircularProgressIndicator(),
+                                  //               Text("Registering...")
+                                  //             ],
+                                  //           ),
+                                  //         ));
 
-                                  // int r = await SigninManager()
-                                  //     .signUp(_email.trim(), _passWord);
+                                  var userModel = UserModel(
+                                      name: _namecon.text,
+                                      email: _emailcon.text.trim(),
+                                      surName: _sornamecon.text,
+                                      dateOfBirth: _dobcon.text,
+                                      phone: _mobilecon.text,
+                                      patientNo: pnocon.text,
+                                      password: _pwcon.text);
+                                  final r = await httpClient.signUp(userModel);
 
-                                  // if (r == resok) {
-                                  //   String iurl = await _imageUpload();
-                                  //   final user =
-                                  //       FirebaseAuth.instance.currentUser;
-                                  //   final umodel = UserModel(
-                                  //       uid: user!.uid,
-                                  //       name: _namecon.text,
-                                  //       email: _uncon.text,
-                                  //       phone: _mobilecon.text,
-                                  //       imageurl: iurl,
-                                  //       address: _addrcon.text,
-                                  //       emno: _emnocon.text,
-                                  //       role: UserRole.expert.index.toString(),
-                                  //       date: DateTime.now().toIso8601String());
-                                  //   await FbHandeler.createDocManual(
-                                  //       umodel.toMap(),
-                                  //       CollectionPath.userpath,
-                                  //       user.uid);
-                                  //   // ignore: use_build_context_synchronously
-                                  //   Navigator.pushReplacement(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //       builder: (context) {
-                                  //         return const CheckSignIn();
-                                  //       },
-                                  //     ),
-                                  //   );
-                                  //   print(r);
-                                  // } else if (r == resfail) {
-                                  //   Get.snackbar(
-                                  //     "SignUp failed",
-                                  //     "Please enter the valid email or password",
-                                  //     icon: const Icon(Icons.error,
-                                  //         color: Colors.white),
-                                  //     snackPosition: SnackPosition.BOTTOM,
-                                  //   );
-                                  // } else if (r == 2) {
-                                  //   Get.snackbar(
-                                  //     "SignUp failed",
-                                  //     "Please enter the valid email or password",
-                                  //     colorText: Colors.red,
-                                  //     backgroundColor: Colors.yellow,
-                                  //     icon: const Icon(Icons.error,
-                                  //         color: Colors.black),
-                                  //     snackPosition: SnackPosition.TOP,
-                                  //   );
-                                  // }
+                                  if (r == true) {
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return const HomeScreen();
+                                        },
+                                      ),
+                                    );
+                                    print(r);
+                                  } else {
+                                    Get.snackbar(
+                                      "SignUp failed",
+                                      "Please enter the valid details",
+                                      icon: const Icon(Icons.error,
+                                          color: Colors.white),
+                                      snackPosition: SnackPosition.BOTTOM,
+                                    );
+                                  }
                                 } else {
                                   print("Not Complete");
                                 }

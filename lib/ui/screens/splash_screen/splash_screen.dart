@@ -2,7 +2,9 @@
 
 import 'dart:async';
 
+import 'package:clinicapp/services/secure_sorage_service/secure_sorage_service.dart';
 import 'package:clinicapp/ui/screens/auth/sign_in.dart';
+import 'package:clinicapp/ui/screens/home/homescreen.dart';
 import 'package:clinicapp/ui/styles/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -33,9 +35,26 @@ class StartState extends State<SplashScreen> {
     return new Timer(duration, route);
   }
 
-  route() {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => SignIn()));
+  Future authCheck() async {
+    final token = await SecureStorageService().getToken();
+    if (token != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  route() async {
+    bool loginStatus = await authCheck();
+    if (loginStatus) {
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    } else {
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => SignIn()));
+    }
   }
 
   initScreen(BuildContext context) {
