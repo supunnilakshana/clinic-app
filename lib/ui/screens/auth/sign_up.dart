@@ -284,7 +284,7 @@ class _SignUpState extends State<SignUp> {
                                       },
                                       decoration: const InputDecoration(
                                           suffixIcon: Icon(Icons.visibility),
-                                          hintText: "Confirm",
+                                          hintText: "Confirm Password",
                                           hintStyle:
                                               TextStyle(color: Colors.grey),
                                           border: InputBorder.none),
