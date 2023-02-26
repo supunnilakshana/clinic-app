@@ -44,7 +44,7 @@ class SecureStorageService {
     }
   }
 
-  Future<UserModel?> getUserData(UserModel userModel) async {
+  Future<UserModel?> getUserData() async {
     try {
       final id = await storage.read(key: "id");
       final name = await storage.read(key: "name");

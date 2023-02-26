@@ -42,7 +42,7 @@ class UserModel {
       surName: map['surName'] as String,
       dateOfBirth: map['dateOfBirth'] as String,
       phone: map['phone'] as String,
-      patientNo: map['patientNo'] != null ? map['patientNo'] as String : null,
+      patientNo: map['patientNo'] != null ? map['patientNo'] as String : "",
     );
   }
 
