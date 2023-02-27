@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:clinicapp/config/http_handeler/httpClient.dart';
 import 'package:clinicapp/ui/styles/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,11 @@ class _MyPositionState extends State<MyPosition> {
       posstion = pdata.possition;
       frontpeople = pdata.front.toString();
       setState(() {});
+      Timer(const Duration(seconds: 5), () {
+        if (mounted) {
+          loadData();
+        }
+      });
     }
   }
 
@@ -51,7 +58,7 @@ class _MyPositionState extends State<MyPosition> {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(
-                " STI Clinic",
+                widget.cinicName,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: size.width * 0.066,

@@ -1,4 +1,4 @@
-import 'package:clinicapp/ui/screens/home/tab1/add_prep/add_prep_screen.dart';
+import 'package:clinicapp/ui/screens/home/tab2/add_booking/add_booking_screen.dart';
 import 'package:clinicapp/ui/widgets/clinic_card.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +33,7 @@ class ClinicScreen extends StatelessWidget {
                   },
                   b2fun: () {},
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 ClinicCard(
@@ -45,7 +45,7 @@ class ClinicScreen extends StatelessWidget {
                   b1fun: () {},
                   b2fun: () {},
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 ClinicCard(

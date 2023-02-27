@@ -10,7 +10,7 @@ import 'package:line_icons/line_icons.dart';
 class HomeScreen extends StatefulWidget {
   final int index;
 
-  const HomeScreen({Key? key, this.index = 0}) : super(key: key);
+  const HomeScreen({Key? key, this.index = 1}) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }

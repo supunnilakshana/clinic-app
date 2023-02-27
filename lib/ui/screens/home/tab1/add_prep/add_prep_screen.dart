@@ -1,22 +1,20 @@
+import 'package:clinicapp/config/http_handeler/httpClient.dart';
+import 'package:clinicapp/models/prep_model.dart';
+import 'package:clinicapp/ui/screens/home/homescreen.dart';
 import 'package:clinicapp/ui/styles/app_styles.dart';
 import 'package:clinicapp/ui/widgets/tots.dart';
 import 'package:flutter/material.dart';
 
-class AddBooking extends StatefulWidget {
-  const AddBooking({Key? key}) : super(key: key);
+class AddPrep extends StatefulWidget {
+  const AddPrep({Key? key}) : super(key: key);
 
   @override
-  State<AddBooking> createState() => _AddBookingState();
+  State<AddPrep> createState() => _AddPrepState();
 }
 
-class _AddBookingState extends State<AddBooking> {
-  String _email = "";
-  String _passWord = "";
-
+class _AddPrepState extends State<AddPrep> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _uncon = TextEditingController();
-  final TextEditingController _pwcon = TextEditingController();
-  final TextEditingController _cpwcon = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -82,73 +80,6 @@ class _AddBookingState extends State<AddBooking> {
                             const SizedBox(
                               height: 10,
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                  boxShadow: const [
-                                    BoxShadow(
-                                        color: Color.fromARGB(84, 41, 136, 214),
-                                        blurRadius: 20,
-                                        offset: Offset(0, 10))
-                                  ]),
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                        border: Border(
-                                            top: BorderSide(
-                                                color: Colors.grey.shade200),
-                                            bottom: BorderSide(
-                                                color: Colors.grey.shade200))),
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButton(
-                                        value: dropdownvalue,
-                                        icon: const Icon(
-                                            Icons.keyboard_arrow_down),
-                                        items: items.map((String items) {
-                                          return DropdownMenuItem(
-                                            value: items,
-                                            child: Text(items),
-                                          );
-                                        }).toList(),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            dropdownvalue = newValue!;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                          border: Border(
-                                              top: BorderSide(
-                                                  color: Colors.grey.shade200),
-                                              bottom: BorderSide(
-                                                  color:
-                                                      Colors.grey.shade200))),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          _selectDate(context);
-                                        },
-                                        child: ListTile(
-                                            title: Text(
-                                              date,
-                                              style: TextStyle(
-                                                fontSize: size.width * 0.033,
-                                              ),
-                                            ),
-                                            leading: Icon(
-                                              Icons.date_range_outlined,
-                                              size: size.width * 0.075,
-                                            )),
-                                      )),
-                                ],
-                              ),
-                            ),
                             const SizedBox(
                               height: 20,
                             ),
@@ -158,13 +89,30 @@ class _AddBookingState extends State<AddBooking> {
                             GestureDetector(
                               onTap: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  if (dropdownvalue != 'Select your Clinic' &&
-                                      date != "Select your date") {
-                                    int ctype = items.indexWhere(
-                                        (element) => element == dropdownvalue);
+                                  int ctype = items.indexWhere(
+                                      (element) => element == dropdownvalue);
+
+                                  final model = PrepModel(
+                                    c_id: "4",
+                                  );
+
+                                  final res =
+                                      await httpClient.createPrep(model);
+                                  if (res) {
+                                    Customtost.commontost(
+                                        "Sucessfully Added", Colors.blue);
+
+                                    // ignore: use_build_context_synchronously
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomeScreen(
+                                                  index: 1,
+                                                )));
                                   } else {
                                     Customtost.commontost(
-                                        "Please complete details", Colors.red);
+                                        "Adding Filed", Colors.red);
                                   }
                                 }
                               },
@@ -216,7 +164,7 @@ class _AddBookingState extends State<AddBooking> {
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime.now(),
-      lastDate: DateTime(2035),
+      lastDate: DateTime(DateTime.now().year + 1),
     );
     if (selected != null && selected != selectedDate) {
       setState(() {
@@ -230,10 +178,4 @@ class _AddBookingState extends State<AddBooking> {
   String date = "Select your date";
 
   DateTime selectedDate = DateTime.now();
-}
-
-class ListItem {
-  int value;
-  String name;
-  ListItem(this.value, this.name);
 }

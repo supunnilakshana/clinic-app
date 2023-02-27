@@ -1,5 +1,6 @@
 import 'package:clinicapp/models/book_model.dart';
 import 'package:clinicapp/models/posstion_model.dart';
+import 'package:clinicapp/models/prep_model.dart';
 import 'package:clinicapp/models/user_model.dart';
 import 'package:clinicapp/services/secure_sorage_service/secure_sorage_service.dart';
 import 'package:dio/dio.dart';
@@ -144,6 +145,26 @@ class HttpClient {
     }
   }
 
+//Add prep
+  Future<bool> createPrep(PrepModel model) async {
+    try {
+      await setSavedToken();
+      const endpoint = 'addchanel';
+      Response response = await dio.post(endpoint, data: model.toMap());
+      print(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return false;
+    }
+  }
+
 //get all booking
   Future<List<BookModel>> getbookings() async {
     List<BookModel> booklist = [];
@@ -168,6 +189,28 @@ class HttpClient {
     return booklist;
   }
 
+  Future<List<PrepModel>> getPreps() async {
+    List<PrepModel> booklist = [];
+    try {
+      await setSavedToken();
+      const endpoint = 'checkprep';
+      Response response = await dio.post(endpoint, data: {});
+      print(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var resposndata = response.data['data'];
+
+        final list = resposndata['preps'] as List;
+        list.forEach((element) {
+          booklist.add(PrepModel.fromMap(element));
+        });
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+    return booklist;
+  }
 //get posstion
 
   Future<PossitionModel?> getPossition(int id) async {
@@ -215,164 +258,24 @@ class HttpClient {
     }
   }
 
-//   Future<List<Productmodel>> getAllproducts() async {
-//     final response = await dio.get(baseURL + 'product/all/');
-//     List<Productmodel> productlist = [];
-
-//     print(response.data);
-
-//     if (response.statusCode == 200) {
-//       print(response.data);
-
-//       print("--------------------");
-
-//       return (response.data as List)
-//           .map((e) => Productmodel.fromMap(e))
-//           .toList();
-//     } else {
-//       throw Exception('Failed to load');
-//     }
-//   }
-
-// //cart
-
-// //all
-
-//   Future<List<FetchCartModel>> getCart() async {
-//     List<FetchCartModel> carttlist = [];
-//     await setSavedToken();
-//     final response = await dio.get(baseURL + 'cart/all');
-
-//     print(response.data);
-//     if (response.statusCode == 200) {
-//       print(response.data);
-
-//       return (response.data as List)
-//           .map((e) => FetchCartModel.fromMap(e))
-//           .toList();
-//     } else {
-//       throw Exception('Failed to load');
-//     }
-//   }
-
-//   Future addCart(CartModel cartModel) async {
-//     await setSavedToken();
-//     final response = await post('cart/add', cartModel.toMap());
-//     print(response.data);
-//     return {
-//       "code": response.statusCode,
-//       "data": response.data,
-//     };
-//   }
-
-//   Future removeCartItem(int id) async {
-//     await setSavedToken();
-//     final response = await dio.delete('cart/delete/$id');
-//     if (kDebugMode) {
-//       print(response.data);
-//     }
-
-//     return {
-//       "code": response.statusCode,
-//       "data": response.data,
-//     };
-//   }
-
-// //wishList
-//   Future<List<FetchWishListModel>> getWishList() async {
-//     List<FetchWishListModel> carttlist = [];
-//     await setSavedToken();
-//     final response = await dio.get(baseURL + 'wishlist/all');
-
-//     print(response.data);
-//     if (response.statusCode == 200) {
-//       print(response.data);
-
-//       return (response.data as List)
-//           .map((e) => FetchWishListModel.fromMap(e))
-//           .toList();
-//     } else {
-//       throw Exception('Failed to load');
-//     }
-//   }
-
-//   Future addWishList(WishListModel wishListModel) async {
-//     await setSavedToken();
-//     final response = await post('wishlist/add', wishListModel.toMap());
-//     print(response.data);
-//     return {
-//       "code": response.statusCode,
-//       "data": response.data,
-//     };
-//   }
-
-//   Future removeWishListItem(int id) async {
-//     await setSavedToken();
-//     final response = await dio.delete('wishlist/delete/$id');
-//     if (kDebugMode) {
-//       print(response.data);
-//     }
-
-//     return {
-//       "code": response.statusCode,
-//       "data": response.data,
-//     };
-//   }
-
-//   //order
-//   Future<String> createOrder(OrderModel orderModel) async {
-//     String orderid = "null";
-//     try {
-//       await setSavedToken();
-//       final response = await post('orders/create', orderModel.toMap());
-//       if (kDebugMode) {
-//         print(response.data);
-//       }
-//       OrderModel resdata = OrderModel.fromMap(response.data);
-//       orderid = resdata.id.toString();
-//     } on Exception catch (e) {
-//       if (kDebugMode) {
-//         print(e);
-//       }
-//     }
-//     return orderid;
-//   }
-
-//   Future orderPaymentsUpdate(String id) async {
-//     await setSavedToken();
-//     final response = await dio.put('orders/updatePaymentStatus/' + id);
-//     if (kDebugMode) {
-//       print(response.data);
-//     }
-
-//     return {
-//       "code": response.statusCode,
-//       "data": response.data,
-//     };
-//   }
-
-//   Future<List<OrderModel>> getOders() async {
-//     List<OrderModel> filterdList = [];
-//     final user = await UserHandeler.getUser();
-//     await setSavedToken();
-//     final response = await dio.post("orders/getOrders");
-
-//     if (response.statusCode == 200) {
-//       if (kDebugMode) {
-//         print(response.data);
-//       }
-//       final orders =
-//           (response.data as List).map((e) => OrderModel.fromMap(e)).toList();
-//       orders.forEach((element) {
-//         if (element.user_id == user.id) {
-//           filterdList.add(element);
-//         }
-//       });
-//     } else {
-//       throw Exception('Failed to load');
-//     }
-//     return filterdList;
-//   }
+  Future<bool> deleteBooking(int id) async {
+    try {
+      await setSavedToken();
+      const endpoint = 'deletechanel';
+      Response response = await dio.post(endpoint, data: {"id": id});
+      print(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return false;
+    }
+  }
 }
 
 HttpClient httpClient = HttpClient();
