@@ -1,3 +1,4 @@
+import 'package:clinicapp/models/book_model.dart';
 import 'package:clinicapp/models/user_model.dart';
 import 'package:clinicapp/services/secure_sorage_service/secure_sorage_service.dart';
 import 'package:dio/dio.dart';
@@ -7,7 +8,7 @@ class HttpClient {
   Dio dio = Dio();
   final SecureStorageService _secureStorageService = SecureStorageService();
 
-  String baseURL = 'http://10.0.2.2:45457/api/';
+  String baseURL = 'http://10.0.2.2:8000/api/';
 
   Map<String, dynamic> headers = {
     "Accept": "application/json",
@@ -17,8 +18,8 @@ class HttpClient {
 
   HttpClient() {
     dio.options.baseUrl = baseURL;
-    dio.options.connectTimeout = const Duration(seconds: 500);
-    dio.options.receiveTimeout = const Duration(seconds: 500);
+    dio.options.connectTimeout = const Duration(seconds: 30);
+    dio.options.receiveTimeout = const Duration(seconds: 30);
     dio.options.headers = headers;
   }
 
@@ -104,6 +105,7 @@ class HttpClient {
   //Signout
   Future<bool> signOut() async {
     try {
+      await setSavedToken();
       const endpoint = 'logout';
       Response response = await dio.post(endpoint, data: {});
       print(response.data);
@@ -121,9 +123,68 @@ class HttpClient {
     }
   }
 
-//   // products
+//Add booking
+  Future<bool> createbooking(BookModel model) async {
+    try {
+      await setSavedToken();
+      const endpoint = 'addchanel';
+      Response response = await dio.post(endpoint, data: model.toMap());
+      print(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return false;
+    }
+  }
 
-//   //getall
+//Add booking
+  Future<List<BookModel>> getbookings(BookModel model) async {
+    List<BookModel> booklist = [];
+    try {
+      await setSavedToken();
+      const endpoint = 'addchanel';
+      Response response = await dio.post(endpoint, data: model.toMap());
+      print(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var resposndata = response.data['data'];
+
+        final list = resposndata['chanels'] as List;
+        list.forEach((element) {
+          booklist.add(BookModel.fromMap(element));
+        });
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
+    return booklist;
+  }
+
+//Add issue
+  Future<bool> createIssue(BookModel model) async {
+    try {
+      const endpoint = 'addchanel';
+      Response response = await dio.post(endpoint, data: model.toMap());
+      print(response.data);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return false;
+    }
+  }
 
 //   Future<List<Productmodel>> getAllproducts() async {
 //     final response = await dio.get(baseURL + 'product/all/');
