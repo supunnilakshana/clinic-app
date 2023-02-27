@@ -54,7 +54,9 @@ class BookkingCard extends StatelessWidget {
                     ),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
-                onPressed: () {},
+                onPressed: () {
+                  b1fun();
+                },
                 child: Text(
                   "Show my Possition",
                   style:
@@ -69,7 +71,9 @@ class BookkingCard extends StatelessWidget {
                     side: const BorderSide(color: Colors.red),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
-                onPressed: () {},
+                onPressed: () {
+                  b2fun();
+                },
                 child: Text(
                   "Cancel",
                   style:

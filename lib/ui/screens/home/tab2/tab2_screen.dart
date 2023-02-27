@@ -1,3 +1,4 @@
+import 'package:clinicapp/ui/screens/home/tab1/add_prep/add_prep_screen.dart';
 import 'package:clinicapp/ui/widgets/clinic_card.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,12 @@ class ClinicScreen extends StatelessWidget {
                       "Sexual health service offering screening and treatment for STIs",
                   b1text: "Book STI Screen Online",
                   b2text: "What to expect at the STI Clinic",
-                  b1fun: () {},
+                  b1fun: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddBooking()));
+                  },
                   b2fun: () {},
                 ),
                 SizedBox(

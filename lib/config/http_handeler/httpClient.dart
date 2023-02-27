@@ -1,4 +1,5 @@
 import 'package:clinicapp/models/book_model.dart';
+import 'package:clinicapp/models/posstion_model.dart';
 import 'package:clinicapp/models/user_model.dart';
 import 'package:clinicapp/services/secure_sorage_service/secure_sorage_service.dart';
 import 'package:dio/dio.dart';
@@ -143,13 +144,13 @@ class HttpClient {
     }
   }
 
-//Add booking
-  Future<List<BookModel>> getbookings(BookModel model) async {
+//get all booking
+  Future<List<BookModel>> getbookings() async {
     List<BookModel> booklist = [];
     try {
       await setSavedToken();
-      const endpoint = 'addchanel';
-      Response response = await dio.post(endpoint, data: model.toMap());
+      const endpoint = 'checkchennels';
+      Response response = await dio.post(endpoint, data: {});
       print(response.data);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var resposndata = response.data['data'];
@@ -167,11 +168,39 @@ class HttpClient {
     return booklist;
   }
 
-//Add issue
-  Future<bool> createIssue(BookModel model) async {
+//get posstion
+
+  Future<PossitionModel?> getPossition(int id) async {
+    final reqData = {
+      "id": id,
+    };
     try {
-      const endpoint = 'addchanel';
-      Response response = await dio.post(endpoint, data: model.toMap());
+      await setSavedToken();
+      const endpoint = 'yettogo';
+      Response response = await dio.post(endpoint, data: reqData);
+      print(response.data);
+      var resposndata = response.data['data'];
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final posstion = PossitionModel.fromMap(resposndata);
+
+        return posstion;
+      } else {
+        return null;
+      }
+    } on Exception catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+      return null;
+    }
+  }
+
+//Add issue
+  Future<bool> createIssue(String message) async {
+    try {
+      await setSavedToken();
+      const endpoint = 'sendcontact';
+      Response response = await dio.post(endpoint, data: {"message": message});
       print(response.data);
       if (response.statusCode == 200 || response.statusCode == 201) {
         return true;

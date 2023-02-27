@@ -3,9 +3,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:clinicapp/config/http_handeler/httpClient.dart';
 import 'package:clinicapp/services/secure_sorage_service/secure_sorage_service.dart';
 import 'package:clinicapp/services/validator/validate_handeler.dart';
 import 'package:clinicapp/ui/styles/app_styles.dart';
+import 'package:clinicapp/ui/widgets/tots.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -86,67 +88,6 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                         child: Lottie.asset('assets/animation/contact-us.json',
                             height: size.height * 0.3),
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.all(8.0),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       GestureDetector(
-                      //         onTap: () {
-                      //           _makeemail();
-                      //         },
-                      //         child: Image.asset(
-                      //           "assets/icons/email.png",
-                      //           width: size.width * 0.08,
-                      //         ),
-                      //       ),
-                      //       SizedBox(
-                      //         width: size.width * 0.03,
-                      //       ),
-                      //       GestureDetector(
-                      //         onTap: () async {
-                      //           _makePhoneCall();
-                      //         },
-                      //         child: Image.asset(
-                      //           "assets/icons/viber.png",
-                      //           width: size.width * 0.08,
-                      //         ),
-                      //       ),
-                      //       SizedBox(
-                      //         width: size.width * 0.03,
-                      //       ),
-                      //       GestureDetector(
-                      //         onTap: () {
-                      //           _makewhatappl();
-                      //         },
-                      //         child: Image.asset(
-                      //           "assets/icons/whatsapp.png",
-                      //           width: size.width * 0.08,
-                      //         ),
-                      //       ),
-                      //       SizedBox(
-                      //         width: size.width * 0.03,
-                      //       ),
-                      //       GestureDetector(
-                      //         onTap: () {},
-                      //         child: Image.asset(
-                      //           "assets/icons/facebook.png",
-                      //           width: size.width * 0.08,
-                      //         ),
-                      //       ),
-                      //       SizedBox(
-                      //         width: size.width * 0.03,
-                      //       ),
-                      //       GestureDetector(
-                      //         onTap: () {},
-                      //         child: Image.asset(
-                      //           "assets/icons/twitter-sign.png",
-                      //           width: size.width * 0.08,
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                       SizedBox(height: size.height * 0.01),
                     ],
                   ),
@@ -280,7 +221,18 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                             ),
                             GestureDetector(
                               onTap: () async {
-                                if (_formKey.currentState!.validate()) {}
+                                if (_formKey.currentState!.validate()) {
+                                  final res = await httpClient
+                                      .createIssue(_addrcon.text);
+
+                                  if (res) {
+                                    Customtost.commontost(
+                                        "Successfully submitted", Colors.blue);
+                                    _addrcon.clear();
+                                  } else {
+                                    Customtost.commontost("Error", Colors.red);
+                                  }
+                                }
                               },
                               child: Container(
                                 height: 50,

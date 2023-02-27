@@ -7,7 +7,9 @@ class Errorpage extends StatelessWidget {
   const Errorpage({Key? key, required this.size}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Lottie.asset("assets/animations/erroranimi.json", width: size));
+    return Center(
+      child: Container(
+          child: Lottie.asset("assets/animation/error.json", width: size)),
+    );
   }
 }

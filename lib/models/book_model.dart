@@ -2,10 +2,10 @@
 import 'dart:convert';
 
 class BookModel {
-  final int c_id;
-  final int? u_id;
+  final String c_id;
+  final String? u_id;
   final String date;
-  final int? possition;
+  final String? possition;
   final String? updated_at;
   final String? created_at;
   final int? id;
@@ -33,10 +33,10 @@ class BookModel {
 
   factory BookModel.fromMap(Map<String, dynamic> map) {
     return BookModel(
-      c_id: map['c_id'] as int,
+      c_id: map['c_id'] as String,
       u_id: map['u_id'] ?? "",
       date: map['date'] as String,
-      possition: map['possition'] as int,
+      possition: map['possition'] as String,
       updated_at: map['updated_at'] ?? "",
       created_at: map['created_at'] ?? "",
       id: map['id'] as int,

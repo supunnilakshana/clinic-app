@@ -1,3 +1,6 @@
+import 'package:clinicapp/config/http_handeler/httpClient.dart';
+import 'package:clinicapp/models/book_model.dart';
+import 'package:clinicapp/ui/screens/home/homescreen.dart';
 import 'package:clinicapp/ui/styles/app_styles.dart';
 import 'package:clinicapp/ui/widgets/tots.dart';
 import 'package:flutter/material.dart';
@@ -162,6 +165,27 @@ class _AddBookingState extends State<AddBooking> {
                                       date != "Select your date") {
                                     int ctype = items.indexWhere(
                                         (element) => element == dropdownvalue);
+
+                                    final model = BookModel(
+                                        c_id: ctype.toString(), date: date);
+
+                                    final res =
+                                        await httpClient.createbooking(model);
+                                    if (res) {
+                                      Customtost.commontost(
+                                          "Sucessfully Added", Colors.blue);
+                                      // ignore: use_build_context_synchronously
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const HomeScreen(
+                                                    index: 2,
+                                                  )));
+                                    } else {
+                                      Customtost.commontost(
+                                          "Adding Fialed", Colors.red);
+                                    }
                                   } else {
                                     Customtost.commontost(
                                         "Please complete details", Colors.red);
@@ -216,7 +240,7 @@ class _AddBookingState extends State<AddBooking> {
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime.now(),
-      lastDate: DateTime(2035),
+      lastDate: DateTime(DateTime.now().year + 1),
     );
     if (selected != null && selected != selectedDate) {
       setState(() {

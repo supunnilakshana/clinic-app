@@ -55,7 +55,9 @@ class ClinicCard extends StatelessWidget {
                     ),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
-                onPressed: () {},
+                onPressed: () {
+                  b1fun();
+                },
                 child: Text(
                   b1text,
                   style:
@@ -70,7 +72,9 @@ class ClinicCard extends StatelessWidget {
                     side: BorderSide(),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
-                onPressed: () {},
+                onPressed: () {
+                  b2fun();
+                },
                 child: Text(
                   b2text,
                   style: TextStyle(
