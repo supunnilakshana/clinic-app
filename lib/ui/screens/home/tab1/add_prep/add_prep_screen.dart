@@ -43,7 +43,7 @@ class _AddPrepState extends State<AddPrep> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Book your clinic",
+                        "Book your prep",
                         style: TextStyle(color: Colors.white, fontSize: 40),
                       ),
                       const SizedBox(
