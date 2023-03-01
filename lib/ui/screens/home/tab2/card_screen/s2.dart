@@ -20,8 +20,11 @@ class S2Screen extends StatelessWidget {
         fontWeight: FontWeight.w400);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 0,
         iconTheme: IconThemeData(color: Colors.black.withOpacity(0.7)),
+        backgroundColor: Colors.transparent,
         // title: Text(
         //   "What to expect",
         //   style: TextStyle(color: Colors.black.withOpacity(0.7)),

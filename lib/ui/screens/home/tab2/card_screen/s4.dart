@@ -20,7 +20,10 @@ class S4Screen extends StatelessWidget {
         fontWeight: FontWeight.w400);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         iconTheme: IconThemeData(color: Colors.black.withOpacity(0.7)),
         title: Text(
           "What to expect",

@@ -1,4 +1,8 @@
 import 'package:clinicapp/ui/screens/home/tab2/add_booking/add_booking_screen.dart';
+import 'package:clinicapp/ui/screens/home/tab2/card_screen/s1.dart';
+import 'package:clinicapp/ui/screens/home/tab2/card_screen/s2.dart';
+import 'package:clinicapp/ui/screens/home/tab2/card_screen/s3.dart';
+import 'package:clinicapp/ui/screens/home/tab2/card_screen/s4.dart';
 import 'package:clinicapp/ui/widgets/clinic_card.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +35,12 @@ class ClinicScreen extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => const AddBooking()));
                   },
-                  b2fun: () {},
+                  b2fun: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const S1Screen()));
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -42,8 +51,18 @@ class ClinicScreen extends StatelessWidget {
                   des: "Treatment for people who have been diagnosed with HIV",
                   b1text: "I’ve been recently diagnosed with HIV",
                   b2text: "See how we treat HIV",
-                  b1fun: () {},
-                  b2fun: () {},
+                  b1fun: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const S2Screen()));
+                  },
+                  b2fun: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const S2Screen()));
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -55,8 +74,18 @@ class ClinicScreen extends StatelessWidget {
                       "Treatment and investigation for infection-associated conditions",
                   b1text: "What to expect",
                   b2text: "see how we treat IDs",
-                  b1fun: () {},
-                  b2fun: () {},
+                  b1fun: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const S3Screen()));
+                  },
+                  b2fun: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const S4Screen()));
+                  },
                 ),
               ],
             ),
